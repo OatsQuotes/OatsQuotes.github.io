@@ -5,17 +5,17 @@
   
   <title>iOS Tidbits | Oats Quotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Tidbit #1 – Defer vs Return: Execution Order  According to swift.org, “A defer statement is used for executing code just before transferring program control outside of the scope that the defer statem">
+  <meta name="description" content="Tidbit #2 – type(of:) vs ‘is’  I recently ran in to code that used type(of:) to compare the types of two objects. This code failed when I changed one object to be optional.This was strange to me, con">
 <meta property="og:type" content="website">
 <meta property="og:title" content="iOS Tidbits">
 <meta property="og:url" content="http://oatsquotes.com/Tidbits/index.html">
 <meta property="og:site_name" content="Oats Quotes">
-<meta property="og:description" content="Tidbit #1 – Defer vs Return: Execution Order  According to swift.org, “A defer statement is used for executing code just before transferring program control outside of the scope that the defer statem">
+<meta property="og:description" content="Tidbit #2 – type(of:) vs ‘is’  I recently ran in to code that used type(of:) to compare the types of two objects. This code failed when I changed one object to be optional.This was strange to me, con">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-05T00:25:18.059Z">
+<meta property="og:updated_time" content="2020-01-29T05:11:12.166Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS Tidbits">
-<meta name="twitter:description" content="Tidbit #1 – Defer vs Return: Execution Order  According to swift.org, “A defer statement is used for executing code just before transferring program control outside of the scope that the defer statem">
+<meta name="twitter:description" content="Tidbit #2 – type(of:) vs ‘is’  I recently ran in to code that used type(of:) to compare the types of two objects. This code failed when I changed one object to be optional.This was strange to me, con">
   
     <link rel="alternative" href="/atom.xml" title="Oats Quotes" type="application/atom+xml">
   
@@ -234,7 +234,13 @@
 
 
           
-        <p><strong> Tidbit #1 – Defer vs Return: Execution Order </strong></p>
+        <p><strong> Tidbit #2 – type(of:) vs ‘is’  </strong><br>I recently ran in to code that used <strong>type(of:)</strong> to compare the types of two objects. This code failed when I changed one object to be optional.<br>This was strange to me, considering it seemed that an object and an optional object of the same type should be the same type, right?<br>Turns out, <strong>type(of:)</strong> returns the type of the object at runtime, and an optional is actually an Optional type with that type as its wrapped value.<br>The better option in this case is to use <strong>is</strong> to check the type, becuase I really only wanted to know the subclass of the object.<br><strong>is</strong> returns whether the object is a subclass of the specified type. Check out the behavior below.</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">let</span> string = <span class="string">"non-optional"</span></div><div class="line"><span class="keyword">let</span> optionalString: <span class="type">String</span>? = <span class="string">"optional"</span></div><div class="line"><span class="keyword">let</span> nilString: <span class="type">String</span>? = <span class="literal">nil</span></div><div class="line"></div><div class="line">type(of: string) <span class="comment">// String.Type</span></div><div class="line">type(of: optionalString) <span class="comment">// Optional&lt;String&gt;.Type</span></div><div class="line">type(of: nilString) <span class="comment">// Optional&lt;String&gt;.Type</span></div><div class="line"></div><div class="line">string <span class="keyword">is</span> <span class="type">String</span> <span class="comment">// true - warning: 'is' test is always true</span></div><div class="line">optionalString <span class="keyword">is</span> <span class="type">String</span> <span class="comment">// true </span></div><div class="line">nilString <span class="keyword">is</span> <span class="type">String</span> <span class="comment">// false </span></div><div class="line"></div><div class="line"><span class="comment">/*  </span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment"> Last two 'is' check warnings: </span></div><div class="line"><span class="comment"> Checking a value with optional type 'String?' against dynamic type 'String' succeeds whenever the value is non-nil; </span></div><div class="line"><span class="comment"> did you mean to use '!= nil'?</span></div><div class="line"><span class="comment"> Replace 'is String' with '!= nil'</span></div><div class="line"><span class="comment"> */</span> </div><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>It’s important to note how <strong>is</strong> behaves with optionals; it basically turns in to a nil check.<br>Some interesting, not so obvious behavior.</p>
+<p><br><br><br></p>
+<hr>
+<p><br></p>
+<p><strong> Tidbit #1 – Defer vs Return: Execution Order </strong></p>
 <p>According to swift.org, “A <strong>defer</strong> statement is used for executing code just before transferring program control outside of the scope that the defer statement appears in.”</p>
 <p>So we often see <strong>defer</strong> at the beggining of a method, containing some sort of clean-up actions that will be perofrmed before the function is finished. This is helpful when there are multiple <strong>return</strong> statments in a method, that are perhaps nested in an if/else if/else chain or a switch statment, so we don’t have to duplicate clean-up code. </p>
 <p>But exactly when the <strong>defer</strong> block executes is not neccesarily intuitive. I found myself wondering, what happens first: the code in a defer block, or the code in a return statement? I ran the following code to find out: </p>
@@ -272,7 +278,7 @@
     <div class="outer">
         <div id="footer-info">
             <div class="footer-left">
-                &copy; 2019 Pat (Oat) Mulloy
+                &copy; 2020 Pat (Oat) Mulloy
             </div>
             <div class="footer-right">
                 
